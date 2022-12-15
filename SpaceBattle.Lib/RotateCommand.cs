@@ -8,6 +8,6 @@ public class RotateCommand : ICommand {
     }
 
     public void Execute() {
-        _rotatable.Angle = _rotatable.Angle + _rotatable.AngleVelocity;
+        _rotatable.Angle += _rotatable.AngleVelocity;
     }
 }
