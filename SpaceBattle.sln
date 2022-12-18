@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceBattle.Lib", "SpaceBattle.Lib\SpaceBattle.Lib.csproj", "{A100FA04-9E41-4137-8207-1F9A40B96E99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceBattle.Lib", "SpaceBattle.Lib\SpaceBattle.Lib.csproj", "{D78EBAC8-7882-43DF-9CD6-4104FCA5D72F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceBattle.Lib.Test", "SpaceBattle.Lib.Test\SpaceBattle.Lib.Test.csproj", "{4B578651-64AA-4CDF-9C8A-A95816825F3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceBattle.Lib.Test", "SpaceBattle.Lib.Test\SpaceBattle.Lib.Test.csproj", "{8B0C019C-68F9-4C55-A7EF-9B24C7B86842}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,13 +16,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A100FA04-9E41-4137-8207-1F9A40B96E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A100FA04-9E41-4137-8207-1F9A40B96E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A100FA04-9E41-4137-8207-1F9A40B96E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A100FA04-9E41-4137-8207-1F9A40B96E99}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B578651-64AA-4CDF-9C8A-A95816825F3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B578651-64AA-4CDF-9C8A-A95816825F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B578651-64AA-4CDF-9C8A-A95816825F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B578651-64AA-4CDF-9C8A-A95816825F3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D78EBAC8-7882-43DF-9CD6-4104FCA5D72F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D78EBAC8-7882-43DF-9CD6-4104FCA5D72F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D78EBAC8-7882-43DF-9CD6-4104FCA5D72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D78EBAC8-7882-43DF-9CD6-4104FCA5D72F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B0C019C-68F9-4C55-A7EF-9B24C7B86842}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0C019C-68F9-4C55-A7EF-9B24C7B86842}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B0C019C-68F9-4C55-A7EF-9B24C7B86842}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B0C019C-68F9-4C55-A7EF-9B24C7B86842}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
