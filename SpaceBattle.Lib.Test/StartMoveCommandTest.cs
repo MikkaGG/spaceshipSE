@@ -13,9 +13,12 @@ namespace BattleSpace.Lib.Test;
             MCommand.Setup(m => m.Execute());
             var RStrategy = new Mock<IStrategy>();
             RStrategy.Setup(m => m.ExecuteStrategy(It.IsAny<object[]>())).Returns(MCommand.Object);
+            var RQueue = new Mock<IStrategy>();
+            RQueue.Setup(x => x.ExecuteStrategy()).Returns(new Queue<ICommand>());
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Object.SetProperty", (object[] args) => RStrategy.Object.ExecuteStrategy(args)).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Command.Move", (object[] args) => RStrategy.Object.ExecuteStrategy(args)).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Queue", (object[] args) => RQueue.Object.ExecuteStrategy()).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Queue.Push", (object[] args) => RStrategy.Object.ExecuteStrategy(args)).Execute();
         }
 
@@ -25,21 +28,9 @@ namespace BattleSpace.Lib.Test;
 
             move_startable.SetupGet(m => m.velocity).Returns(new Vector(1, 1)).Verifiable();
             move_startable.SetupGet(m => m.uObject).Returns(new Mock<IUObject>().Object).Verifiable();
-            move_startable.SetupGet(m => m.queue).Returns(new Mock<Queue<ICommand>>().Object).Verifiable();
             ICommand startMoveCommand = new StartMoveCommand(move_startable.Object);
             startMoveCommand.Execute();
             move_startable.Verify();
-        }
-
-        [Fact]
-        public void StartMoveCommandUnreadableQueue() {
-            var move_startable = new Mock<IMoveCommandStartable>();
-
-            move_startable.SetupGet(m => m.velocity).Returns(new Vector(1, 1)).Verifiable();
-            move_startable.SetupGet(m => m.uObject).Returns(new Mock<IUObject>().Object).Verifiable();
-            move_startable.SetupGet(m => m.queue).Throws(new Exception()).Verifiable();
-            ICommand startMoveCommand = new StartMoveCommand(move_startable.Object);
-            Assert.Throws<Exception>(() => startMoveCommand.Execute());
         }
         
         [Fact]
@@ -48,7 +39,6 @@ namespace BattleSpace.Lib.Test;
 
             move_startable.SetupGet(m => m.velocity).Returns(new Vector(1, 1)).Verifiable();
             move_startable.SetupGet(m => m.uObject).Throws(new Exception()).Verifiable();
-            move_startable.SetupGet(m => m.queue).Returns(new Mock<Queue<ICommand>>().Object).Verifiable();
             ICommand startMoveCommand = new StartMoveCommand(move_startable.Object);
             Assert.Throws<Exception>(() => startMoveCommand.Execute());
         }
@@ -59,7 +49,7 @@ namespace BattleSpace.Lib.Test;
 
             move_startable.SetupGet(m => m.velocity).Throws(new Exception()).Verifiable();
             move_startable.SetupGet(m => m.uObject).Returns(new Mock<IUObject>().Object).Verifiable();
-            move_startable.SetupGet(m => m.queue).Returns(new Mock<Queue<ICommand>>().Object).Verifiable();
+            // move_startable.SetupGet(m => m.queue).Returns(new Mock<Queue<ICommand>>().Object).Verifiable();
             ICommand startMoveCommand = new StartMoveCommand(move_startable.Object);
             Assert.Throws<Exception>(() => startMoveCommand.Execute());
         }
