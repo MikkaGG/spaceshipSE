@@ -20,11 +20,11 @@ public class ConstructingATree : ICommand {
             }
         }
 
-        catch (FileNotFoundException e) {
-            throw new FileNotFoundException(e.ToString());
+        catch (FileNotFoundException ex) {
+            throw new FileNotFoundException(ex.ToString());
         }
-        catch (Exception e) {
-            throw new Exception(e.ToString());
+        catch (Exception ex) {
+            throw new Exception(ex.ToString());
         }
     }
 
