@@ -49,7 +49,6 @@ namespace BattleSpace.Lib.Test;
 
             move_startable.SetupGet(m => m.velocity).Throws(new Exception()).Verifiable();
             move_startable.SetupGet(m => m.uObject).Returns(new Mock<IUObject>().Object).Verifiable();
-            // move_startable.SetupGet(m => m.queue).Returns(new Mock<Queue<ICommand>>().Object).Verifiable();
             ICommand startMoveCommand = new StartMoveCommand(move_startable.Object);
             Assert.Throws<Exception>(() => startMoveCommand.Execute());
         }
