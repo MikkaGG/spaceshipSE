@@ -6,9 +6,11 @@ public class EndMoveCommand : ICommand {
         this.obj = obj;
     }
     public void Execute() {
-        ICommand EndCommand = IoC.Resolve<ICommand>("Command.EmptyCommand");
-        IoC.Resolve<ICommand>("Game.DeleteProperty", obj.UObject, "velocity").Execute();
-        IoC.Resolve<ICommand>("Game.MyObject.GetUObj", obj).Execute();
-        IoC.Resolve<ICommand>("Game.InjectCommand", obj.Queue, EndCommand).Execute();
+        var uobject = obj.UObject;
+        var cmd = obj.Cmd;
+        var vel = obj.velocity;
+        IoC.Resolve<ICommand>("Game.Commands.DeleteObjectPropertyCommand", uobject, vel).Execute();
+        var injectbleCommand = IoC.Resolve<IInjectable>("Game.Commands.EmptyCommand", uobject, cmd).Inject();
+        IoC.Resolve<ICommand>("Game.Queue.Push", injectbleCommand).Execute();   
     }
 }
