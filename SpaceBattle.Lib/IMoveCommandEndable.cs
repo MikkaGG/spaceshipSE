@@ -4,7 +4,7 @@ public interface IMoveCommandEndable {
     IUObject UObject { 
         get; 
     }
-    Queue<ICommand> Queue { 
-        get; 
+    ICommand Cmd {
+        get;
     }
 }
