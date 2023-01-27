@@ -6,4 +6,7 @@ public interface IMoveCommandStartable {
     Vector velocity { 
         get; 
     }
+    ICommand command {
+        get;
+    }
 }
