@@ -7,4 +7,7 @@ public interface IMoveCommandEndable {
     ICommand Cmd {
         get;
     }
+    Vector velocity {
+        get;
+    }
 }
