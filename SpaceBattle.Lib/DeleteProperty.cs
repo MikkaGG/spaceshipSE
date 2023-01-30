@@ -13,7 +13,7 @@ public class DeleteProperty : Hwdtech.ICommand {
         this.propertyDelete = propertyDelete;
     }
     public void Execute() {
-        for (int i = 0; i < properties.Count; i++ ) {
+        for (int i = 0; i < properties.Count; i++) {
             propertyDelete.DeleteProperty(obj ,properties[i]);
         }
     }
