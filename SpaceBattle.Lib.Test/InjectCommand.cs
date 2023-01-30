@@ -1,8 +1,8 @@
 namespace BattleSpace.Lib.Test;
 
 public class InjectCommand : IInjectable {
-    private IUObject _obj;
-    private ICommand _cmd;
+    IUObject _obj;
+    ICommand _cmd;
 
     public InjectCommand(IUObject obj, ICommand cmd) {
         _obj = obj;
@@ -10,6 +10,7 @@ public class InjectCommand : IInjectable {
     }
 
     public ICommand Inject() {
-        return new EmptyCommand();
+        var cmd = new EmptyCommand();
+        return cmd;
     }
 }
