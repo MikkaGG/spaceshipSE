@@ -1,6 +1,5 @@
-namespace BattleSpace.Lib {
+namespace BattleSpace.Lib ;
 
-    public interface IPropertyDelete {
-        public void DeleteProperty(IUObject uObject, string key);
-    }
+public interface IPropertyDelete {
+    public void DeleteProperty(IUObject uObject, string key);
 }
