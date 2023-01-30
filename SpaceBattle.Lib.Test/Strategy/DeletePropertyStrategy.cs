@@ -1,7 +1,7 @@
 namespace BattleSpace.Lib.Test;
 
 public class DeletePropertyStrategy : IStrategy {
-    private IPropertyDelete _propertyDelete;
+    IPropertyDelete _propertyDelete;
 
     public DeletePropertyStrategy(IPropertyDelete propertyDelete) {
         _propertyDelete = propertyDelete;
