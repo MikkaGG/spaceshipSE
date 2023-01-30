@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BattleSpace.Lib;
 
 public interface IMoveCommandEndable {
@@ -7,7 +9,7 @@ public interface IMoveCommandEndable {
     ICommand Cmd {
         get;
     }
-    Vector velocity {
+    IList<string> Properties {
         get;
     }
 }
