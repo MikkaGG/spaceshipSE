@@ -3,53 +3,73 @@ using Hwdtech.Ioc;
 using Moq;
 
 namespace BattleSpace.Lib.Test;
-    public class StartMoveCommandTest {
-        public StartMoveCommandTest() {
-            new InitScopeBasedIoCImplementationCommand().Execute();
 
-            IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
+public class StartMoveCommandTest {
+    public StartMoveCommandTest() {
+        new InitScopeBasedIoCImplementationCommand().Execute();
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
-            var MCommand = new Mock<ICommand>();
-            MCommand.Setup(m => m.Execute());
-            var RStrategy = new Mock<IStrategy>();
-            RStrategy.Setup(m => m.ExecuteStrategy(It.IsAny<object[]>())).Returns(MCommand.Object);
-            var RQueue = new Mock<IStrategy>();
-            RQueue.Setup(x => x.ExecuteStrategy()).Returns(new Queue<ICommand>());
+        var setProperty = new Mock<ISetProperty>();
+        var uObject = new Mock<IUObject>();
+        setProperty.Setup(m => m.SetProperty(uObject.Object, It.IsAny<IList<string>>()));
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Object.SetProperty", (object[] args) => RStrategy.Object.ExecuteStrategy(args)).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Command.Move", (object[] args) => RStrategy.Object.ExecuteStrategy(args)).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Queue", (object[] args) => RQueue.Object.ExecuteStrategy()).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Queue.Push", (object[] args) => RStrategy.Object.ExecuteStrategy(args)).Execute();
-        }
+        var setPropertyStrategy = new SetPropertyStrategy(setProperty.Object);
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Comands.SetProperty", (object[] args) => (setPropertyStrategy.ExecuteStrategy(args))).Execute();
 
-        [Fact]
-        public void StartMoveCommandPosition() {
-            var move_startable = new Mock<IMoveCommandStartable>();
+        var repeatStrategy = new RepeatCommandStrategy();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Comands.Repeat", (object[] args) => (repeatStrategy.ExecuteStrategy(args))).Execute();
 
-            move_startable.SetupGet(m => m.velocity).Returns(new Vector(1, 1)).Verifiable();
-            move_startable.SetupGet(m => m.uObject).Returns(new Mock<IUObject>().Object).Verifiable();
-            ICommand startMoveCommand = new StartMoveCommand(move_startable.Object);
-            startMoveCommand.Execute();
-            move_startable.Verify();
-        }
-        
-        [Fact]
-        public void StartMoveCommandUnreadableObject() {
-            var move_startable = new Mock<IMoveCommandStartable>();
-
-            move_startable.SetupGet(m => m.velocity).Returns(new Vector(1, 1)).Verifiable();
-            move_startable.SetupGet(m => m.uObject).Throws(new Exception()).Verifiable();
-            ICommand startMoveCommand = new StartMoveCommand(move_startable.Object);
-            Assert.Throws<Exception>(() => startMoveCommand.Execute());
-        }
-
-        [Fact]
-        public void StartMoveCommandUnreadableVelocity() {
-            var move_startable = new Mock<IMoveCommandStartable>();
-
-            move_startable.SetupGet(m => m.velocity).Throws(new Exception()).Verifiable();
-            move_startable.SetupGet(m => m.uObject).Returns(new Mock<IUObject>().Object).Verifiable();
-            ICommand startMoveCommand = new StartMoveCommand(move_startable.Object);
-            Assert.Throws<Exception>(() => startMoveCommand.Execute());
-        }
+        var queue = new Mock<IStrategy>();
+        queue.Setup(p => p.ExecuteStrategy(It.IsAny<object[]>()));
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Queue.Push", (object[] args) => queue.Object.ExecuteStrategy(args)).Execute();
     }
+
+    [Fact]
+    public void StartableCommandTest() {
+        var moveStart = new Mock<IMoveCommandStartable>();
+        moveStart.SetupGet<ICommand>(m => m.Command).Returns(new Mock<ICommand>().Object);
+        moveStart.SetupGet<IUObject>(m => m.UObject).Returns(new Mock<IUObject>().Object);
+        moveStart.SetupGet<IList<string>>(m => m.Properties).Returns(new Mock<IList<string>>().Object);
+
+        var startCommand = new StartMoveCommand(moveStart.Object);
+        startCommand.Execute();
+
+        moveStart.VerifyAll();
+    }
+
+    [Fact]
+    public void UnreadableCommandTest() {
+        var moveStart = new Mock<IMoveCommandStartable>();
+        moveStart.SetupGet<ICommand>(m => m.Command).Throws<Exception>();
+        moveStart.SetupGet<IUObject>(m => m.UObject).Returns(new Mock<IUObject>().Object);
+        moveStart.SetupGet<IList<string>>(m => m.Properties).Returns(new Mock<IList<string>>().Object);
+
+        var startCommand = new StartMoveCommand(moveStart.Object);
+
+        Assert.Throws<Exception>(() => startCommand.Execute());
+    }
+
+    [Fact]
+    public void UnreadableObjectTest() {
+        var moveStart = new Mock<IMoveCommandStartable>();
+        moveStart.SetupGet<ICommand>(m => m.Command).Returns(new Mock<ICommand>().Object);
+        moveStart.SetupGet<IUObject>(m => m.UObject).Throws<Exception>();
+        moveStart.SetupGet<IList<string>>(m => m.Properties).Returns(new Mock<IList<string>>().Object);
+
+        var startCommand = new StartMoveCommand(moveStart.Object);
+
+        Assert.Throws<Exception>(() => startCommand.Execute());
+    }
+
+    [Fact]
+    public void UnreadablePropertiesTest() {
+        var moveStart = new Mock<IMoveCommandStartable>();
+        moveStart.SetupGet<ICommand>(m => m.Command).Returns(new Mock<ICommand>().Object);
+        moveStart.SetupGet<IUObject>(m => m.UObject).Returns(new Mock<IUObject>().Object);
+        moveStart.SetupGet<IList<string>>(m => m.Properties).Throws<Exception>();
+
+        var startCommand = new StartMoveCommand(moveStart.Object);
+
+        Assert.Throws<Exception>(() => startCommand.Execute());
+    }
+}
