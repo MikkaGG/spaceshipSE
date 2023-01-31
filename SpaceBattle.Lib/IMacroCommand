@@ -1,0 +1,14 @@
+using System.Collections.Generic;
+
+namespace BattleSpace.Lib;
+
+public interface IMacroCommand {
+    public List<string> commands {
+        get;
+    }
+    public IUObject uobject {
+        get;
+    }
+
+    public void Execute();
+}
