@@ -1,31 +1,42 @@
+using Moq;
+using Xunit;
+
 using Hwdtech;
 using Hwdtech.Ioc;
-using Moq;
+
 namespace BattleSpace.Lib.Test;
-public class LongTermCommandTests {
-    public LongTermCommandTests() {
+
+public class CreateLongTermOperationCommandTest {
+    public CreateLongTermOperationCommandTest() {
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
-        var MockCmd = new Mock<ICommand>();
-        MockCmd.Setup(mc => mc.Execute());
-        var MockStrategyParams = new Mock<IStrategy>();
-        MockStrategyParams.Setup(mc => mc.ExecuteStrategy(It.IsAny<object[]>())).Returns(MockCmd.Object);
-        var MockEnStr = new Mock<IEnumerable<string>>();
-        var MockStratReturnStr = new Mock<IStrategy>();
-        MockStratReturnStr.Setup(mc => mc.ExecuteStrategy(It.IsAny<object[]>())).Returns(MockEnStr .Object);
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "BuildMacroCommandStrat", (object[] args) => MockStrategyParams.Object.ExecuteStrategy(args)).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "LongTermOperationStrategy", (object[] args) => MockStrategyParams.Object.ExecuteStrategy(args)).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SetUpOperation.Moving", (object[] args) => MockStratReturnStr.Object.ExecuteStrategy(args)).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Create.MacroCommand", (object[] args) =>  MockStrategyParams.Object.ExecuteStrategy(args)).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.InjectCommand", (object[] args) => MockStrategyParams.Object.ExecuteStrategy(args)).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.RepeadCommand", (object[] args) => MockStrategyParams.Object.ExecuteStrategy(args)).Execute();
+
+        var createLOStrategy = new LOstrategy();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.CreatLOCommand", (object[] args) => (createLOStrategy.ExecuteStrategy(args))).Execute();
+
+        var createCommandStrategy = new Mock<IStrategy>();
+        createCommandStrategy.Setup(s => s.ExecuteStrategy(It.IsAny<string>(), It.IsAny<IUObject>())).Returns(It.IsAny<ICommand>());
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.CreateCommand", (object[] args) => (createCommandStrategy.Object.ExecuteStrategy(args))).Execute();
+
+        var repeatStrategy = new Mock<IStrategy>();
+        repeatStrategy.Setup(s => s.ExecuteStrategy(It.IsAny<IUObject>(), It.IsAny<ICommand>())).Returns(It.IsAny<ICommand>());
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.RepeatCommand", (object[] args) => (repeatStrategy.Object.ExecuteStrategy(args))).Execute();
+
+        var injectStrategy = new Mock<IStrategy>();
+        injectStrategy.Setup(s => s.ExecuteStrategy(It.IsAny<IUObject>(), It.IsAny<ICommand>())).Returns(It.IsAny<ICommand>());
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.InjectCommand", (object[] args) => (injectStrategy.Object.ExecuteStrategy(args))).Execute();
+
+        var plugStrategy = new Mock<IStrategy>();
+        plugStrategy.Setup(s => s.ExecuteStrategy(It.IsAny<string>(), It.IsAny<IUObject>())).Returns(It.IsAny<ICommand>());
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.PlugCommand", (object[] args) => (plugStrategy.Object.ExecuteStrategy(args))).Execute();
     }
 
-    [Fact]
-    public void LongTermOperationStrategyTest() {
-        IStrategy LO = new LOstrategy();
-        string name = "Moving";
-        var obj = new Mock<IUObject>();
-        Assert.NotNull(LO.ExecuteStrategy(name, obj.Object));
-    }
+    [Fact] 
+     public void SuccessfulCreate() { 
+        var dependence = "Game.Command.PlugCommand"; 
+        var uobject = new Mock<IUObject>(); 
+
+        var creatLOCommand = new CreatLOCommand(dependence, uobject.Object);
+        creatLOCommand.Execute(); 
+    } 
 }
