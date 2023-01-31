@@ -1,19 +1,21 @@
 using Hwdtech;
 using Hwdtech.Ioc;
 
-namespace BattleSpace.Lib;
+namespace BattleSpace.Lib {
+    public class StartMoveCommand : ICommand {
+        IMoveCommandStartable obj;
 
-public class StartMoveCommand : ICommand {
-    private IMoveCommandStartable startCommand;
+        public StartMoveCommand(IMoveCommandStartable obj) {
+            this.obj = obj;
+        }
 
-    public StartMoveCommand(IMoveCommandStartable startCommand) {
-        this.startCommand = startCommand;
-    }
-    
-    public void Execute() {
-        var moveCommand = IoC.Resolve<ICommand>("Command.Move", startCommand.uObject);
-        IoC.Resolve<ICommand>("Object.SetProperty", startCommand.uObject, "velocity", startCommand.velocity).Execute();
-        var create_queue = IoC.Resolve<Queue<ICommand>>("Queue");
-        IoC.Resolve<ICommand>("Queue.Push", create_queue, moveCommand).Execute();
+        public void Execute() {
+            var uobject = obj.UObject;
+            var command = obj.Command;
+            var properties = obj.Properties;
+
+            IoC.Resolve<ICommand>("Game.Comands.SetProperty", uobject, properties).Execute();
+            IoC.Resolve<ICommand>("Game.Queue.Push", IoC.Resolve<IRepeatable>("Game.Comands.Repeat", uobject, command).Repeat());
+        }
     }
 }

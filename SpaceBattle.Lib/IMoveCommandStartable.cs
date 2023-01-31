@@ -1,12 +1,12 @@
 namespace BattleSpace.Lib;
 public interface IMoveCommandStartable {
-    IUObject uObject { 
+    IUObject UObject { 
         get; 
     }
-    Vector velocity { 
-        get; 
+    ICommand Command {
+        get;
     }
-    ICommand command {
+    IList<string> Properties {
         get;
     }
 }
