@@ -47,4 +47,3 @@ public class ConstructingATreeTest {
         getTreeStrategy.Verify();
     }
 }
-
