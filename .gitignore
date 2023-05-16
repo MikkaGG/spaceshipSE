@@ -132,4 +132,5 @@ $RECYCLE.BIN/
 
 _NCrunch*
 
-.vscode
+.vscode/
+coverage.json
