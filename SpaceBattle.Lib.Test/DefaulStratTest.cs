@@ -11,9 +11,9 @@ public class DefaultStratTest
 
         DefaultStrat df = new();
 
-        // var act = () => df.Execute(ae);
+        // var act = () => df.ExecuteStrategy(ae);
 
-        Assert.Throws<ArgumentException>(() => df.ExecuteStrategy());
+        Assert.Throws<ArgumentException>(() => df.ExecuteStrategy(ae));
 
         // act.Should().Throw<ArgumentException>();
     }
