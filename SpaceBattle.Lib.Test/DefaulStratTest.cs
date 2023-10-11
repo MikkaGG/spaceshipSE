@@ -1,5 +1,3 @@
-// using FluentAssertions;
-
 namespace BattleSpace.Lib.Test;
 
 public class DefaultStratTest
@@ -11,10 +9,6 @@ public class DefaultStratTest
 
         DefaultStrat df = new();
 
-        // var act = () => df.ExecuteStrategy(ae);
-
         Assert.Throws<ArgumentException>(() => df.ExecuteStrategy(ae));
-
-        // act.Should().Throw<ArgumentException>();
     }
 }
